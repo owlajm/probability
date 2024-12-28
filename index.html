@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>복지 정책 정보와 댓글 기능</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        section {
+            padding: 2rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .comments-section {
+            margin-top: 2rem;
+            background-color: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        .comment {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+        .comment-form textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 1rem;
+        }
+        .comment-form button {
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .comment-form button:hover {
+            background-color: #002244;
+        }
+    </style>
+    <script>
+        // 댓글을 로컬 스토리지에 저장하고 불러오기
+        function loadComments() {
+            const commentList = document.getElementById('commentList');
+            const savedComments = JSON.parse(localStorage.getItem('comments')) || [];
+            commentList.innerHTML = ''; // 기존 댓글 초기화
+            savedComments.forEach(comment => {
+                const commentDiv = document.createElement('div');
+                commentDiv.classList.add('comment');
+                commentDiv.textContent = comment;
+                commentList.appendChild(commentDiv);
+            });
+        }
+
+        function addComment() {
+            const commentInput = document.getElementById('commentInput');
+            const commentList = document.getElementById('commentList');
+            const newComment = commentInput.value.trim();
+
+            if (newComment === '') {
+                alert('댓글을 입력해주세요.');
+                return;
+            }
+
+            // 로컬 스토리지에 댓글 저장
+            const savedComments = JSON.parse(localStorage.getItem('comments')) || [];
+            savedComments.push(newComment);
+            localStorage.setItem('comments', JSON.stringify(savedComments));
+
+            // 댓글 화면에 표시
+            const commentDiv = document.createElement('div');
+            commentDiv.classList.add('comment');
+            commentDiv.textContent = newComment;
+            commentList.appendChild(commentDiv);
+
+            // 입력창 초기화
+            commentInput.value = '';
+        }
+
+        // 페이지 로드 시 댓글 불러오기
+        window.onload = loadComments;
+    </script>
+</head>
+<body>
+    <header>
+        <h1>복지 정책 정보와 댓글 기능</h1>
+    </header>
+    <section>
+        <div class="container">
+            <h2>복지 정책 정보</h2>
+            <p>이곳은 복지 정책에 대한 정보와 의견을 공유할 수 있는 공간입니다. 아래 댓글을 통해 자신의 의견을 자유롭게 남겨주세요.</p>
+            <div class="comments-section">
+                <h2>의견 남기기</h2>
+                <div id="commentList"></div>
+                <div class="comment-form">
+                    <textarea id="commentInput" placeholder="여기에 댓글을 입력하세요"></textarea>
+                    <button onclick="addComment()">댓글 추가</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <p>© 2024 복지 정책 정보 플랫폼</p>
+    </footer>
+</body>
+</html>
